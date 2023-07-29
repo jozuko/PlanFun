@@ -8,15 +8,14 @@ plugins {
 
 android {
     namespace = "com.jozu.compose.planfun"
-    compileSdk = 33
+    compileSdk = 34
 
     // TODO local.propertiesの読み込み
 
     defaultConfig {
         applicationId = "com.jozu.compose.planfun"
         minSdk = 26
-        // TODO version up
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
