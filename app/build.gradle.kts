@@ -13,7 +13,11 @@ android {
     compileSdk = 33
 
     val localProperties = gradleLocalProperties(rootDir)
+    val googleOauthServerClientId = localProperties.getProperty("google_oauth_server_client_id")
 
+    buildFeatures {
+        buildConfig = true
+    }
     defaultConfig {
         applicationId = "com.jozu.compose.planfun"
         minSdk = 26
@@ -27,6 +31,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "GOOGLE_OAUTH_SERVER_CLIENT_ID", googleOauthServerClientId)
     }
     signingConfigs {
         getByName("debug") {
@@ -94,6 +100,9 @@ dependencies {
     // gson
     implementation("com.google.code.gson:gson:2.10.1")
 
+    // logger
+    implementation("com.jakewharton.timber:timber:5.0.1")
+
     // hilt
     val hiltVersion = "2.47"
     implementation("com.google.dagger:hilt-android:$hiltVersion")
@@ -102,8 +111,8 @@ dependencies {
 
     // firebase
     implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
-    implementation ("com.google.firebase:firebase-analytics-ktx")
-    implementation ("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
 
     // for GoogleSignIn
     implementation("com.google.android.gms:play-services-auth:20.6.0")
