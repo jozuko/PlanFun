@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     kotlin("kapt")
     id("com.android.application")
@@ -8,14 +10,16 @@ plugins {
 
 android {
     namespace = "com.jozu.compose.planfun"
-    compileSdk = 34
+    compileSdk = 33
 
-    // TODO local.propertiesの読み込み
+    val localProperties = gradleLocalProperties(rootDir)
 
     defaultConfig {
         applicationId = "com.jozu.compose.planfun"
         minSdk = 26
-        targetSdk = 34
+        // AGP roadmap https://developer.android.com/studio/releases/gradle-plugin-roadmap?hl=ja
+        //noinspection OldTargetApi
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -24,11 +28,30 @@ android {
             useSupportLibrary = true
         }
     }
-
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file(project.rootProject.file(localProperties.getProperty("keystore.file")))
+            storePassword = localProperties.getProperty("keystore.storePassword")
+            keyAlias = localProperties.getProperty("keystore.alias")
+            keyPassword = localProperties.getProperty("keystore.keyPassword")
+        }
+        create("release") {
+            storeFile = file(project.rootProject.file(localProperties.getProperty("keystore.file")))
+            storePassword = localProperties.getProperty("keystore.storePassword")
+            keyAlias = localProperties.getProperty("keystore.alias")
+            keyPassword = localProperties.getProperty("keystore.keyPassword")
+        }
+    }
     buildTypes {
-        release {
+        debug {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("debug")
+        }
+        release {
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
