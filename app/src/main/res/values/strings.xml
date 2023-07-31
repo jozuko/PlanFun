@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">PlanFun</string>
+
+    <string name="signin_title">ログイン</string>
+    <string name="signin_message">このアプリを使用するにはログインが必要です。</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_out">Sign Out</string>
 </resources>

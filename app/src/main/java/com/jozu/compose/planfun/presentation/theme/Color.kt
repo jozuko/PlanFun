@@ -1,4 +1,4 @@
-package com.jozu.compose.planfun.ui.theme
+package com.jozu.compose.planfun.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
