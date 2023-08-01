@@ -6,6 +6,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.jozu.compose.planfun.BuildConfig
 import dagger.Module
@@ -23,7 +25,10 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object FirebaseModule {
     @Provides
-    fun auth(): FirebaseAuth = Firebase.auth.apply { setLanguageCode("ja") }
+    fun provideAuth(): FirebaseAuth = Firebase.auth.apply { setLanguageCode("ja") }
+
+    @Provides
+    fun provideFirestore(): FirebaseFirestore = Firebase.firestore
 
     @Provides
     fun provideGoogleSignInOptions(): GoogleSignInOptions =

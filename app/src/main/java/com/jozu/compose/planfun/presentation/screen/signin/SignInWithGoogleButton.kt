@@ -32,8 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.updateBounds
 import com.jozu.compose.planfun.R
-import com.jozu.compose.planfun.infra.log.Logger
 import com.jozu.compose.planfun.presentation.theme.robotoFamily
+import timber.log.Timber
 
 /**
  *
@@ -72,7 +72,7 @@ fun SignInWithGoogleButton(enabled: Boolean, onClick: () -> Unit) {
                 }
             }
             .clickable {
-                Logger.d("SignInWithGoogle clicked")
+                Timber.d("SignInWithGoogle clicked")
                 onClick.invoke()
             },
     ) {

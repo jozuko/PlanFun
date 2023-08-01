@@ -25,38 +25,13 @@ class LogTree : Timber.DebugTree() {
         return super.isLoggable(tag, priority)
     }
 
-    override fun log(priority: Int, message: String?, vararg args: Any?) {
-        this.log(
-            priority = priority,
-            t = null,
-            message = message,
-            args = args,
-        )
-    }
-
-    override fun log(priority: Int, t: Throwable?) {
-        this.log(
-            priority = priority,
-            t = t,
-            message = null,
-        )
-    }
-
-    override fun log(priority: Int, t: Throwable?, message: String?, vararg args: Any?) {
+    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         if (!SHOW_THREAD_NAME) {
-            super.log(priority, t, message, *args)
+            super.log(priority, tag, "App-> $message", t)
             return
         }
 
         val threadName = Thread.currentThread().name
-        val logMessage = if (message.isNullOrEmpty()) {
-            threadName
-        } else if (args.isEmpty()) {
-            "[$threadName]$message"
-        } else {
-            "[$threadName]${message.format(*args)}"
-        }
-
-        super.log(priority, t, logMessage)
+        super.log(priority, tag, "App-$threadName> $message", t)
     }
 }

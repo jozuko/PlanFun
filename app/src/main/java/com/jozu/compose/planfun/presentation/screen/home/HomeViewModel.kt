@@ -17,6 +17,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val signOutCase: SignOutCase,
 ) : ViewModel() {
+
     fun onClickSignOut() {
         LoadingManager.showLoading()
         viewModelScope.launch {

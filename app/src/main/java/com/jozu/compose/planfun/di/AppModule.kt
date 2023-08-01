@@ -2,8 +2,11 @@ package com.jozu.compose.planfun.di
 
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.jozu.compose.planfun.domain.AccountRepository
+import com.jozu.compose.planfun.domain.SpotRepository
 import com.jozu.compose.planfun.infra.firebase.AccountRepositoryImpl
+import com.jozu.compose.planfun.infra.firebase.SpotRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,4 +26,10 @@ object AppModule {
         auth: FirebaseAuth,
         googleSignInClient: GoogleSignInClient,
     ): AccountRepository = AccountRepositoryImpl(Dispatchers.IO, auth, googleSignInClient)
+
+    @Provides
+    fun provideSpotRepository(
+        auth: FirebaseAuth,
+        firestore: FirebaseFirestore,
+    ): SpotRepository = SpotRepositoryImpl(Dispatchers.IO, auth, firestore)
 }

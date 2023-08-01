@@ -23,6 +23,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jozu.compose.planfun.R
+import com.jozu.compose.planfun.presentation.screen.spot.SpotListScreen
 import kotlinx.coroutines.launch
 
 /**
@@ -40,9 +41,12 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
         drawerState = drawerState,
         drawerContent = { HomeMenuDrawerContent(viewModel) },
     ) {
-        Scaffold(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection), topBar = { TopBar(scrollBehavior, drawerState) }) { paddingValues ->
+        Scaffold(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            topBar = { TopBar(scrollBehavior, drawerState) },
+        ) { paddingValues ->
             Box(modifier = Modifier.padding(paddingValues)) {
-
+                SpotListScreen()
             }
         }
     }

@@ -9,12 +9,12 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.jozu.compose.planfun.domain.Account
 import com.jozu.compose.planfun.domain.AccountFuture
 import com.jozu.compose.planfun.domain.AccountRepository
-import com.jozu.compose.planfun.infra.log.Logger
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -30,7 +30,7 @@ class AccountRepositoryImpl(
     override val accountFuture: Flow<AccountFuture<Account>>
         get() = callbackFlow {
             val listener = FirebaseAuth.AuthStateListener { auth ->
-                Logger.d("FirebaseAuth.AuthStateListener called. user=${auth.currentUser?.uid}")
+                Timber.d("FirebaseAuth.AuthStateListener called. user=${auth.currentUser?.uid}")
 
                 val firebaseUser = auth.currentUser
                 if (firebaseUser == null) {
