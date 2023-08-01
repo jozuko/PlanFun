@@ -2,6 +2,7 @@ package com.jozu.compose.planfun.presentation.screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
@@ -21,6 +22,7 @@ import com.jozu.compose.planfun.domain.AccountFuture
 import com.jozu.compose.planfun.presentation.common.LoadingManager
 import com.jozu.compose.planfun.presentation.screen.home.HomeScreen
 import com.jozu.compose.planfun.presentation.screen.signin.SignInScreen
+import com.jozu.compose.planfun.presentation.screen.splash.SplashScreen
 import com.jozu.compose.planfun.presentation.theme.PlanFunTheme
 
 /**
@@ -93,7 +95,7 @@ private fun Loading() {
 }
 
 @Composable
-private fun AuthorizedView() {
+private fun BoxScope.AuthorizedView() {
     HomeScreen()
 }
 
@@ -103,8 +105,8 @@ private fun UnauthorizedView() {
 }
 
 @Composable
-private fun AuthProceedingView() {
-    Text("auth Proceeding")
+private fun BoxScope.AuthProceedingView() {
+    SplashScreen()
 }
 
 @Composable
