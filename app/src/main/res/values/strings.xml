@@ -5,4 +5,11 @@
     <string name="signin_message">このアプリを使用するにはログインが必要です。</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="sign_out">Sign Out</string>
+
+    <string name="init_image_merge_start">開始</string>
+    <string name="init_image_merge_server_names_done">サーバー確認完了</string>
+    <string name="init_image_merge_local_files_done">ローカル確認完了</string>
+    <string name="init_image_merge_download_done">ダウンロード完了</string>
+    <string name="init_image_merge_remove_done">ファイルマージ完了</string>
+    <string name="init_image_merge_error">エラーが発生しました。ネットワークの状況を確認の上、再起動してください。</string>
 </resources>

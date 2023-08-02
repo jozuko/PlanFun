@@ -9,6 +9,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import com.jozu.compose.planfun.BuildConfig
 import dagger.Module
 import dagger.Provides
@@ -29,6 +31,9 @@ object FirebaseModule {
 
     @Provides
     fun provideFirestore(): FirebaseFirestore = Firebase.firestore
+
+    @Provides
+    fun provideStorage(): FirebaseStorage = Firebase.storage
 
     @Provides
     fun provideGoogleSignInOptions(): GoogleSignInOptions =

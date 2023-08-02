@@ -2,7 +2,6 @@ package com.jozu.compose.planfun.presentation.screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
@@ -20,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jozu.compose.planfun.domain.AccountFuture
 import com.jozu.compose.planfun.presentation.common.LoadingManager
-import com.jozu.compose.planfun.presentation.screen.home.HomeScreen
+import com.jozu.compose.planfun.presentation.screen.init.InitScreen
 import com.jozu.compose.planfun.presentation.screen.signin.SignInScreen
 import com.jozu.compose.planfun.presentation.screen.splash.SplashScreen
 import com.jozu.compose.planfun.presentation.theme.PlanFunTheme
@@ -56,19 +55,19 @@ fun PlanFunApp(viewModel: PlanFunAppViewModel = hiltViewModel()) {
                     Box(modifier = contentBoxModifier) {
                         when (accountState.value) {
                             is AccountFuture.Authorized -> {
-                                AuthorizedView()
+                                InitScreen()
                             }
 
                             is AccountFuture.Unauthorized -> {
-                                UnauthorizedView()
+                                SignInScreen()
                             }
 
                             is AccountFuture.Proceeding -> {
-                                AuthProceedingView()
+                                SplashScreen()
                             }
 
                             is AccountFuture.Error -> {
-                                AuthErrorView()
+                                Text("auth Error")
                             }
                         }
                     }
@@ -92,24 +91,4 @@ private fun Loading() {
     ) {
         CircularProgressIndicator()
     }
-}
-
-@Composable
-private fun BoxScope.AuthorizedView() {
-    HomeScreen()
-}
-
-@Composable
-private fun UnauthorizedView() {
-    SignInScreen()
-}
-
-@Composable
-private fun BoxScope.AuthProceedingView() {
-    SplashScreen()
-}
-
-@Composable
-private fun AuthErrorView() {
-    Text("auth Error")
 }
