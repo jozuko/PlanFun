@@ -17,7 +17,7 @@ data class FirestoreSpot(
     val address: String? = null,
     val tel: String? = null,
     val url: String? = null,
-    val imageUrl: String? = null,
+    val imageId: String? = null,
     val memo: List<String> = emptyList(),
 ) {
     companion object {
@@ -29,7 +29,7 @@ data class FirestoreSpot(
                 address = spot.address,
                 tel = spot.tel,
                 url = spot.url,
-                imageUrl = spot.imageUrl,
+                imageId = spot.photoId,
                 memo = spot.memo.map { it },
             )
         }
@@ -43,7 +43,7 @@ data class FirestoreSpot(
             address = address ?: "",
             tel = tel ?: "",
             url = url ?: "",
-            imageUrl = imageUrl ?: "",
+            photoId = imageId ?: "",
             memo = memo.map { it },
         )
     }

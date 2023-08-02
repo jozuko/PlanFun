@@ -23,7 +23,7 @@ class SpotAddCase @Inject constructor(
                 address = "address",
                 tel = "tel",
                 url = "url",
-                imageUrl = "imageUrl",
+                photoId = null,
                 memo = listOf("memo"),
             )
         ).first()

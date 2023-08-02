@@ -14,7 +14,7 @@ data class Spot(
     val address: String,
     val tel: String,
     val url: String,
-    val imageUrl: String,
+    val photoId: String?,
     val memo: List<String>,
 ) {
     companion object {
@@ -24,7 +24,7 @@ data class Spot(
             address: String,
             tel: String,
             url: String,
-            imageUrl: String,
+            photoId: String?,
             memo: List<String>,
         ): Spot {
             return Spot(
@@ -34,7 +34,7 @@ data class Spot(
                 address = address,
                 tel = tel,
                 url = url,
-                imageUrl = imageUrl,
+                photoId = photoId,
                 memo = memo,
             )
         }
