@@ -48,17 +48,21 @@ class AccountRepositoryImpl(
     }
 
     override suspend fun signInGoogle(resultData: Intent): Unit = withContext(coroutineContext) {
+        Timber.d("<AccountRepository>signInGoogle start")
         val googleSignInAccount: GoogleSignInAccount = GoogleSignIn.getSignedInAccountFromIntent(resultData).await()
         val firebaseCredential = GoogleAuthProvider.getCredential(googleSignInAccount.idToken, null)
         auth.signInWithCredential(firebaseCredential).await()
+        Timber.d("<AccountRepository>signInGoogle end")
     }
 
     override suspend fun signOut(): Unit = withContext(coroutineContext) {
+        Timber.d("<AccountRepository>signOut start")
         val firebaseUser = auth.currentUser ?: return@withContext
         if (firebaseUser.providerData.any { it.providerId == "google.com" }) {
             googleSignInClient.signOut().await()
         }
 
         auth.signOut()
+        Timber.d("<AccountRepository>signOut end")
     }
 }

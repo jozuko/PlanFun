@@ -10,3 +10,7 @@ import androidx.compose.ui.unit.dp
 val paddingLarge = 16.dp
 val paddingMiddle = 8.dp
 val paddingSmall = 4.dp
+
+val roundedLarge = 20.dp
+val roundedMiddle = 10.dp
+val roundedSmall = 5.dp

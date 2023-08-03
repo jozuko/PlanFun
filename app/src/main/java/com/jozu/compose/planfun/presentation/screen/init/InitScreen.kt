@@ -1,8 +1,11 @@
 package com.jozu.compose.planfun.presentation.screen.init
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,9 +17,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jozu.compose.planfun.R
 import com.jozu.compose.planfun.domain.ImageMergeStatus
+import com.jozu.compose.planfun.presentation.common.AppIcon
 import com.jozu.compose.planfun.presentation.screen.home.HomeScreen
-import com.jozu.compose.planfun.presentation.screen.splash.SplashScreen
 import com.jozu.compose.planfun.presentation.theme.paddingLarge
+import com.jozu.compose.planfun.presentation.theme.paddingMiddle
 
 /**
  *
@@ -65,13 +69,20 @@ fun InitScreen(initViewModel: InitViewModel = hiltViewModel()) {
 @Composable
 private fun WorkingScreen(message: String) {
     Box(modifier = Modifier.fillMaxSize()) {
-        SplashScreen()
-        Text(
-            message,
+        AppIcon()
+
+        Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = paddingLarge),
-            style = MaterialTheme.typography.bodyMedium,
-        )
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            LinearProgressIndicator()
+            Spacer(modifier = Modifier.padding(paddingMiddle))
+            Text(
+                message,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
     }
 }

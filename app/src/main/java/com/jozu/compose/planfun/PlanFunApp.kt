@@ -15,6 +15,5 @@ class PlanFunApp : Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(LogTree())
-        Timber.d("<hello>")
     }
 }

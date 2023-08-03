@@ -1,19 +1,25 @@
 package com.jozu.compose.planfun.presentation.screen.home
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.jozu.compose.planfun.R
+import com.jozu.compose.planfun.presentation.common.AppIcon
 import com.jozu.compose.planfun.presentation.theme.paddingMiddle
+import kotlinx.coroutines.launch
 
 /**
  *
@@ -21,25 +27,39 @@ import com.jozu.compose.planfun.presentation.theme.paddingMiddle
  * Copyright (c) 2023 Studio Jozu. All rights reserved.
  */
 @Composable
-fun HomeMenuDrawerContent(viewModel: HomeViewModel) {
+fun HomeMenuDrawerContent(drawerState: DrawerState, viewModel: HomeViewModel = hiltViewModel()) {
     ModalDrawerSheet {
-        DrawerContentRow(stringResource(id = R.string.sign_out), viewModel::onClickSignOut)
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center,
+        ) {
+            AppIcon()
+        }
+        Divider(modifier = Modifier.padding(vertical = paddingMiddle))
+        DrawerContentRow(drawerState, stringResource(id = R.string.drawer_menu_plan), viewModel::onClickMenuPlan)
+        DrawerContentRow(drawerState, stringResource(id = R.string.drawer_menu_spot), viewModel::onClickMenuSpot)
+
+        Divider(modifier = Modifier.padding(vertical = paddingMiddle))
+        DrawerContentRow(drawerState, stringResource(id = R.string.drawer_menu_sign_out), viewModel::onClickSignOut)
     }
 }
 
 @Composable
-private fun DrawerContentRow(title: String, onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .height(60.dp)
-            .fillMaxWidth()
-            .clickable { onClick.invoke() },
+private fun DrawerContentRow(drawerState: DrawerState, title: String, onClick: () -> Unit) {
+    val coroutineScope = rememberCoroutineScope()
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = {
+            coroutineScope.launch {
+                drawerState.close()
+            }
+            onClick.invoke()
+        },
+        colors = ButtonDefaults.textButtonColors(),
     ) {
         Text(
             title,
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .padding(paddingMiddle),
+            style = MaterialTheme.typography.labelLarge,
         )
     }
 }

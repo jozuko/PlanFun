@@ -1,5 +1,7 @@
 package com.jozu.compose.planfun.presentation.screen.home
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jozu.compose.planfun.presentation.common.LoadingManager
@@ -17,6 +19,16 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val signOutCase: SignOutCase,
 ) : ViewModel() {
+    private val _displayScreen: MutableState<DisplayScreen> = mutableStateOf(DisplayScreen.SPOT)
+    val displayScreen get() = _displayScreen
+
+    fun onClickMenuPlan() {
+        _displayScreen.value = DisplayScreen.PLAN
+    }
+
+    fun onClickMenuSpot() {
+        _displayScreen.value = DisplayScreen.SPOT
+    }
 
     fun onClickSignOut() {
         LoadingManager.showLoading()
@@ -25,4 +37,8 @@ class HomeViewModel @Inject constructor(
             LoadingManager.hideLoading()
         }
     }
+}
+
+enum class DisplayScreen {
+    PLAN, SPOT,
 }

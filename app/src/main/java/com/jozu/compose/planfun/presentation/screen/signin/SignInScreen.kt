@@ -15,7 +15,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,11 +29,7 @@ import com.jozu.compose.planfun.presentation.theme.paddingLarge
  * Copyright (c) 2023 Studio Jozu. All rights reserved.
  */
 @Composable
-fun SignInScreen(
-    viewModel: SignInViewModel = hiltViewModel(),
-) {
-    val uiState = viewModel.uiState.collectAsState()
-
+fun SignInScreen() {
     Scaffold(
         topBar = { AppBar() },
         content = { paddingValues ->
@@ -43,7 +38,7 @@ fun SignInScreen(
                     .padding(paddingValues)
                     .fillMaxSize()
             ) {
-                Content(viewModel, uiState)
+                Content()
             }
         },
     )
@@ -68,7 +63,8 @@ private fun AppBar() {
 }
 
 @Composable
-private fun Content(viewModel: SignInViewModel, uiState: State<SignInUiState>) {
+private fun Content(viewModel: SignInViewModel = hiltViewModel()) {
+    val uiState = viewModel.uiState.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()

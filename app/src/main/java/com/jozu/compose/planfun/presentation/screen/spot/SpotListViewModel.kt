@@ -1,5 +1,7 @@
 package com.jozu.compose.planfun.presentation.screen.spot
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jozu.compose.planfun.domain.Spot
@@ -25,7 +27,10 @@ class SpotListViewModel @Inject constructor(
     private val spotAddCase: SpotAddCase,
 ) : ViewModel() {
     private val _spotListFlow: MutableStateFlow<List<Spot>> = MutableStateFlow(emptyList())
-    val spotListFlow = _spotListFlow.asStateFlow()
+    val spotListFlow get() = _spotListFlow.asStateFlow()
+
+    private val _isShowAddDialog = mutableStateOf(false)
+    val isShowAddDialog: State<Boolean> get() = _isShowAddDialog
 
     fun refreshSpotList() {
         viewModelScope.launch {
@@ -40,6 +45,14 @@ class SpotListViewModel @Inject constructor(
                 _spotListFlow.value = spotWatchCase.merge(_spotListFlow.value, spotChanges)
             }
         }
+    }
+
+    fun onShowAdd() {
+        _isShowAddDialog.value = true
+    }
+
+    fun onDismissAdd() {
+        _isShowAddDialog.value = false
     }
 
     fun add() {

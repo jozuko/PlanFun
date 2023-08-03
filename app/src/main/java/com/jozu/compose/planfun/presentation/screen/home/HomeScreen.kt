@@ -39,14 +39,23 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
     ModalNavigationDrawer(
         drawerState = drawerState,
-        drawerContent = { HomeMenuDrawerContent(viewModel) },
+        drawerContent = { HomeMenuDrawerContent(drawerState) },
     ) {
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = { TopBar(scrollBehavior, drawerState) },
         ) { paddingValues ->
             Box(modifier = Modifier.padding(paddingValues)) {
-                SpotListScreen()
+                val displayScreenState = viewModel.displayScreen
+                when (displayScreenState.value) {
+                    DisplayScreen.PLAN -> {
+                        // TODO PlanListScreen()
+                    }
+
+                    DisplayScreen.SPOT -> {
+                        SpotListScreen()
+                    }
+                }
             }
         }
     }

@@ -21,7 +21,7 @@ import javax.inject.Inject
 class InitViewModel @Inject constructor(
     private val imageGetCase: ImageGetCase,
 ) : ViewModel() {
-    private val _statusFlow:MutableStateFlow<ImageMergeStatus> = MutableStateFlow(ImageMergeStatus.Start)
+    private val _statusFlow: MutableStateFlow<ImageMergeStatus> = MutableStateFlow(ImageMergeStatus.Start)
     val statusFlow = _statusFlow.asStateFlow()
 
     fun start() {

@@ -6,5 +6,5 @@ package com.jozu.compose.planfun.domain
  * Copyright (c) 2023 Studio Jozu. All rights reserved.
  */
 data class Image(
- val id: String,
+    val id: String,
 )

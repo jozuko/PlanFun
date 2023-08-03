@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">PlanFun</string>
 
+    <string name="drawer_menu_plan">旅の計画</string>
+    <string name="drawer_menu_spot">スポット</string>
+    <string name="drawer_menu_sign_out">Sign Out</string>
+
     <string name="signin_title">ログイン</string>
     <string name="signin_message">このアプリを使用するにはログインが必要です。</string>
     <string name="sign_in_with_google">Sign in with Google</string>
@@ -12,4 +16,6 @@
     <string name="init_image_merge_download_done">ダウンロード完了</string>
     <string name="init_image_merge_remove_done">ファイルマージ完了</string>
     <string name="init_image_merge_error">エラーが発生しました。ネットワークの状況を確認の上、再起動してください。</string>
+
+    <string name="spot_add_spot">add spot</string>
 </resources>
