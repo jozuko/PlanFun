@@ -13,6 +13,7 @@ import com.jozu.compose.planfun.domain.SpotChange
 import com.jozu.compose.planfun.domain.SpotFuture
 import com.jozu.compose.planfun.domain.SpotRepository
 import com.jozu.compose.planfun.infra.firebase.model.FirestoreSpot
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -24,15 +25,15 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
-import kotlin.coroutines.CoroutineContext
+import javax.inject.Inject
 
 /**
  *
  * Created by jozuko on 2023/08/01.
  * Copyright (c) 2023 Studio Jozu. All rights reserved.
  */
-class SpotRepositoryImpl(
-    private val coroutineContext: CoroutineContext,
+class SpotRepositoryImpl @Inject constructor(
+    private val dispatcher: CoroutineDispatcher,
     private val auth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
 ) : SpotRepository {
@@ -97,7 +98,7 @@ class SpotRepositoryImpl(
             .catch { cause ->
                 emit(SpotFuture.Error(cause))
             }
-            .flowOn(coroutineContext)
+            .flowOn(dispatcher)
     }
 
     override fun add(spot: Spot): Flow<SpotFuture<Spot>> {
@@ -117,6 +118,6 @@ class SpotRepositoryImpl(
             emit(SpotFuture.Proceeding)
         }.catch { cause ->
             emit(SpotFuture.Error(cause))
-        }.flowOn(coroutineContext)
+        }.flowOn(dispatcher)
     }
 }

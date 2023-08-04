@@ -9,21 +9,22 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.jozu.compose.planfun.domain.Account
 import com.jozu.compose.planfun.domain.AccountFuture
 import com.jozu.compose.planfun.domain.AccountRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import kotlin.coroutines.CoroutineContext
+import javax.inject.Inject
 
 /**
  *
  * Created by jozuko on 2023/07/21.
  * Copyright (c) 2023 Studio Jozu. All rights reserved.
  */
-class AccountRepositoryImpl(
-    private val coroutineContext: CoroutineContext,
+class AccountRepositoryImpl @Inject constructor(
+    private val dispatcher: CoroutineDispatcher,
     private val auth: FirebaseAuth,
     private val googleSignInClient: GoogleSignInClient,
 ) : AccountRepository {
@@ -47,7 +48,7 @@ class AccountRepositoryImpl(
         return googleSignInClient.signInIntent
     }
 
-    override suspend fun signInGoogle(resultData: Intent): Unit = withContext(coroutineContext) {
+    override suspend fun signInGoogle(resultData: Intent): Unit = withContext(dispatcher) {
         Timber.d("<AccountRepository>signInGoogle start")
         val googleSignInAccount: GoogleSignInAccount = GoogleSignIn.getSignedInAccountFromIntent(resultData).await()
         val firebaseCredential = GoogleAuthProvider.getCredential(googleSignInAccount.idToken, null)
@@ -55,7 +56,7 @@ class AccountRepositoryImpl(
         Timber.d("<AccountRepository>signInGoogle end")
     }
 
-    override suspend fun signOut(): Unit = withContext(coroutineContext) {
+    override suspend fun signOut(): Unit = withContext(dispatcher) {
         Timber.d("<AccountRepository>signOut start")
         val firebaseUser = auth.currentUser ?: return@withContext
         if (firebaseUser.providerData.any { it.providerId == "google.com" }) {

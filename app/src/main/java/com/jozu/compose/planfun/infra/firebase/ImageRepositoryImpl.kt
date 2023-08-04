@@ -6,6 +6,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.jozu.compose.planfun.domain.ImageMergeStatus
 import com.jozu.compose.planfun.domain.ImageRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -14,16 +16,16 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.io.File
-import kotlin.coroutines.CoroutineContext
+import javax.inject.Inject
 
 /**
  *
  * Created by jozuko on 2023/08/02.
  * Copyright (c) 2023 Studio Jozu. All rights reserved.
  */
-class ImageRepositoryImpl(
-    private val context: Context,
-    private val coroutineContext: CoroutineContext,
+class ImageRepositoryImpl @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val dispatcher: CoroutineDispatcher,
     private val auth: FirebaseAuth,
     private val storage: FirebaseStorage,
 ) : ImageRepository {
@@ -71,7 +73,7 @@ class ImageRepositoryImpl(
             emit(ImageMergeStatus.Start)
         }.catch { cause ->
             emit(ImageMergeStatus.Error(cause))
-        }.flowOn(coroutineContext)
+        }.flowOn(dispatcher)
     }
 
     private suspend fun getServerFileNames(): Set<String> {
