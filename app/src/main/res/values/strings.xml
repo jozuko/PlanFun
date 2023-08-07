@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">PlanFun</string>
 
+    <string name="add">追加</string>
+
     <string name="drawer_menu_plan">旅の計画</string>
     <string name="drawer_menu_spot">スポット</string>
     <string name="drawer_menu_sign_out">Sign Out</string>
@@ -18,4 +20,11 @@
     <string name="init_image_merge_error">エラーが発生しました。ネットワークの状況を確認の上、再起動してください。</string>
 
     <string name="spot_add_spot">add spot</string>
+    <string name="spot_name_placeholder">名称</string>
+    <string name="spot_latitude_placeholder">緯度</string>
+    <string name="spot_longitude_placeholder">経度</string>
+    <string name="spot_address_placeholder">住所</string>
+    <string name="spot_url_placeholder">URL</string>
+    <string name="spot_tel_placeholder">電話番号</string>
+    <string name="spot_memo_placeholder">メモ</string>
 </resources>

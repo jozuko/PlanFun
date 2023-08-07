@@ -8,10 +8,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.snapshots
 import com.google.firebase.firestore.ktx.toObject
-import com.jozu.compose.planfun.domain.Spot
-import com.jozu.compose.planfun.domain.SpotChange
-import com.jozu.compose.planfun.domain.SpotFuture
-import com.jozu.compose.planfun.domain.SpotRepository
+import com.jozu.compose.planfun.domain.spot.Spot
+import com.jozu.compose.planfun.domain.spot.SpotChange
+import com.jozu.compose.planfun.domain.spot.SpotFuture
+import com.jozu.compose.planfun.domain.spot.SpotRepository
 import com.jozu.compose.planfun.infra.firebase.model.FirestoreSpot
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose

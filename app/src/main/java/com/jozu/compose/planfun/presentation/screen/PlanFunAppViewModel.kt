@@ -2,9 +2,9 @@ package com.jozu.compose.planfun.presentation.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jozu.compose.planfun.domain.Account
-import com.jozu.compose.planfun.domain.AccountFuture
-import com.jozu.compose.planfun.domain.AccountRepository
+import com.jozu.compose.planfun.domain.account.Account
+import com.jozu.compose.planfun.domain.account.AccountRepository
+import com.jozu.compose.planfun.domain.account.AccountStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,9 +21,9 @@ class PlanFunAppViewModel @Inject constructor(
     accountRepository: AccountRepository,
 ) : ViewModel() {
     /** ログイン中ユーザを返却するcallbackFlow */
-    val accountState: StateFlow<AccountFuture<Account>> = accountRepository.accountFuture.stateIn(
+    val accountState: StateFlow<AccountStatus<Account>> = accountRepository.accountFuture.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
-        initialValue = AccountFuture.Proceeding,
+        initialValue = AccountStatus.Proceeding,
     )
 }

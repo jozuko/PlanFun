@@ -1,5 +1,6 @@
-package com.jozu.compose.planfun.domain
+package com.jozu.compose.planfun.domain.image
 
+import android.graphics.Bitmap
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -9,4 +10,5 @@ import kotlinx.coroutines.flow.Flow
  */
 interface ImageRepository {
     fun merge(): Flow<ImageMergeStatus>
+    fun upload(bitmap: Bitmap): Flow<ImageUploadStatus<Image>>
 }

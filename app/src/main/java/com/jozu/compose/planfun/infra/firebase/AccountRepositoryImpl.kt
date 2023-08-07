@@ -6,9 +6,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.jozu.compose.planfun.domain.Account
-import com.jozu.compose.planfun.domain.AccountFuture
-import com.jozu.compose.planfun.domain.AccountRepository
+import com.jozu.compose.planfun.domain.account.Account
+import com.jozu.compose.planfun.domain.account.AccountRepository
+import com.jozu.compose.planfun.domain.account.AccountStatus
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -28,16 +28,16 @@ class AccountRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val googleSignInClient: GoogleSignInClient,
 ) : AccountRepository {
-    override val accountFuture: Flow<AccountFuture<Account>>
+    override val accountFuture: Flow<AccountStatus<Account>>
         get() = callbackFlow {
             val listener = FirebaseAuth.AuthStateListener { auth ->
                 Timber.d("FirebaseAuth.AuthStateListener called. user=${auth.currentUser?.uid}")
 
                 val firebaseUser = auth.currentUser
                 if (firebaseUser == null) {
-                    this.trySend(AccountFuture.Unauthorized)
+                    this.trySend(AccountStatus.Unauthorized)
                 } else {
-                    this.trySend(AccountFuture.Authorized(Account.fromFirebaseUser(firebaseUser)))
+                    this.trySend(AccountStatus.Authorized(Account.fromFirebaseUser(firebaseUser)))
                 }
             }
             auth.addAuthStateListener(listener)

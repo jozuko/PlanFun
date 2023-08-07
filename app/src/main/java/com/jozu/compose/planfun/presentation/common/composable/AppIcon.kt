@@ -1,4 +1,4 @@
-package com.jozu.compose.planfun.presentation.common
+package com.jozu.compose.planfun.presentation.common.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

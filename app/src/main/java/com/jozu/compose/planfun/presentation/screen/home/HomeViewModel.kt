@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jozu.compose.planfun.presentation.common.LoadingManager
-import com.jozu.compose.planfun.usecase.SignOutCase
+import com.jozu.compose.planfun.usecase.SignOutUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,7 +17,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val signOutCase: SignOutCase,
+    private val signOutCase: SignOutUseCase,
 ) : ViewModel() {
     private val _displayScreen: MutableState<DisplayScreen> = mutableStateOf(DisplayScreen.SPOT)
     val displayScreen get() = _displayScreen

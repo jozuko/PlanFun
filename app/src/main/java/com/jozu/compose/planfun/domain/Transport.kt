@@ -1,5 +1,7 @@
 package com.jozu.compose.planfun.domain
 
+import com.jozu.compose.planfun.domain.plan.PlanItem
+
 /**
  *
  * Created by jozuko on 2023/08/01.

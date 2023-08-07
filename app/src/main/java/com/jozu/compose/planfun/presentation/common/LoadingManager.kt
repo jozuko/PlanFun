@@ -2,6 +2,7 @@ package com.jozu.compose.planfun.presentation.common
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import timber.log.Timber
 
 /**
  *
@@ -13,10 +14,12 @@ object LoadingManager {
     val isLoading get() = _isLoading.asStateFlow()
 
     fun showLoading() {
+        Timber.d("Loading show")
         _isLoading.value = true
     }
 
     fun hideLoading() {
+        Timber.d("Loading hide")
         _isLoading.value = false
     }
 }

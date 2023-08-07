@@ -28,6 +28,7 @@ import com.jozu.compose.planfun.R
 fun SpotListScreen(
     viewModel: SpotListViewModel = hiltViewModel(),
 ) {
+    val uiState = viewModel.uiState.collectAsState().value
 
     LaunchedEffect(Unit) {
         viewModel.refreshSpotList()
@@ -41,10 +42,9 @@ fun SpotListScreen(
         }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
-            Text("isShowAddDialog=${viewModel.isShowAddDialog.value}${viewModel.isShowAddDialog}")
-            SpotList()
+            SpotList(uiState)
 
-            AnimatedVisibility(visible = viewModel.isShowAddDialog.value) {
+            AnimatedVisibility(visible = uiState.isShowAddDialog) {
                 SpotAddScreen(viewModel::onDismissAdd)
             }
         }
@@ -52,11 +52,10 @@ fun SpotListScreen(
 }
 
 @Composable
-private fun SpotList(viewModel: SpotListViewModel = hiltViewModel()) {
-    val spotListState = viewModel.spotListFlow.collectAsState()
+private fun SpotList(uiState: SpotListUiState) {
     LazyColumn {
-        items(spotListState.value) {
-            Text(it.id ?: "")
+        items(uiState.spotList) { spot ->
+            Text(spot.id ?: "")
         }
     }
 }

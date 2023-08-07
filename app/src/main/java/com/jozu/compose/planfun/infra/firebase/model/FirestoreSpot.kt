@@ -3,7 +3,7 @@ package com.jozu.compose.planfun.infra.firebase.model
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.GeoPoint
-import com.jozu.compose.planfun.domain.Spot
+import com.jozu.compose.planfun.domain.spot.Spot
 
 /**
  *
@@ -17,8 +17,8 @@ data class FirestoreSpot(
     val address: String? = null,
     val tel: String? = null,
     val url: String? = null,
-    val imageId: String? = null,
-    val memo: List<String> = emptyList(),
+    val imageName: String? = null,
+    val memo: String? = null,
 ) {
     companion object {
         fun fromSpot(spot: Spot): FirestoreSpot {
@@ -29,8 +29,8 @@ data class FirestoreSpot(
                 address = spot.address,
                 tel = spot.tel,
                 url = spot.url,
-                imageId = spot.photoId,
-                memo = spot.memo.map { it },
+                imageName = spot.imageName,
+                memo = spot.memo,
             )
         }
     }
@@ -43,8 +43,8 @@ data class FirestoreSpot(
             address = address ?: "",
             tel = tel ?: "",
             url = url ?: "",
-            photoId = imageId ?: "",
-            memo = memo.map { it },
+            imageName = imageName ?: "",
+            memo = memo ?: "",
         )
     }
 }

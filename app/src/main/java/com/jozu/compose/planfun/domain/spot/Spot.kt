@@ -1,4 +1,4 @@
-package com.jozu.compose.planfun.domain
+package com.jozu.compose.planfun.domain.spot
 
 import com.google.android.gms.maps.model.LatLng
 
@@ -14,8 +14,8 @@ data class Spot(
     val address: String,
     val tel: String,
     val url: String,
-    val photoId: String?,
-    val memo: List<String>,
+    val imageName: String?,
+    val memo: String,
 ) {
     companion object {
         fun newSpot(
@@ -24,8 +24,8 @@ data class Spot(
             address: String,
             tel: String,
             url: String,
-            photoId: String?,
-            memo: List<String>,
+            imageName: String?,
+            memo: String,
         ): Spot {
             return Spot(
                 id = null,
@@ -34,7 +34,7 @@ data class Spot(
                 address = address,
                 tel = tel,
                 url = url,
-                photoId = photoId,
+                imageName = imageName,
                 memo = memo,
             )
         }

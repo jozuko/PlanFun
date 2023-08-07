@@ -1,4 +1,4 @@
-package com.jozu.compose.planfun.domain
+package com.jozu.compose.planfun.domain.account
 
 import android.content.Intent
 import kotlinx.coroutines.flow.Flow
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
  * Copyright (c) 2023 Studio Jozu. All rights reserved.
  */
 interface AccountRepository {
-    val accountFuture: Flow<AccountFuture<Account>>
+    val accountFuture: Flow<AccountStatus<Account>>
 
     fun requestGoogleAuth(): Intent
     suspend fun signInGoogle(resultData: Intent)

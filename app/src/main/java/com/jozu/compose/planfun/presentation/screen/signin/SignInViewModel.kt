@@ -6,7 +6,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jozu.compose.planfun.presentation.common.LoadingManager
-import com.jozu.compose.planfun.usecase.GoogleSignInCase
+import com.jozu.compose.planfun.usecase.GoogleSignInUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,7 +20,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val googleSignInCase: GoogleSignInCase,
+    private val googleSignInCase: GoogleSignInUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SignInUiState())
     val uiState = _uiState.asStateFlow()

@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
-import com.jozu.compose.planfun.domain.AccountRepository
+import com.jozu.compose.planfun.domain.account.AccountRepository
 import com.jozu.compose.planfun.usecase.model.SigninGoogleLegacyError
 import timber.log.Timber
 import javax.inject.Inject
@@ -14,7 +14,7 @@ import javax.inject.Inject
  * Created by jozuko on 2023/07/28.
  * Copyright (c) 2023 Studio Jozu. All rights reserved.
  */
-class GoogleSignInCase @Inject constructor(
+class GoogleSignInUseCase @Inject constructor(
     private val accountRepository: AccountRepository,
 ) {
     fun signIn(launcher: ActivityResultLauncher<Intent>) {

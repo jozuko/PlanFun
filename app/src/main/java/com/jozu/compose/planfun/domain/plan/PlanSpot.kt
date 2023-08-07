@@ -1,5 +1,6 @@
-package com.jozu.compose.planfun.domain
+package com.jozu.compose.planfun.domain.plan
 
+import com.jozu.compose.planfun.domain.spot.Spot
 import java.util.Calendar
 
 /**

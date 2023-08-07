@@ -1,9 +1,9 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
-    kotlin("kapt")
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
     id("com.google.gms.google-services")
     id("com.google.dagger.hilt.android")
 }
@@ -99,16 +99,13 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
     runtimeOnly("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
 
-    // gson
-    implementation("com.google.code.gson:gson:2.10.1")
-
     // logger
     implementation("com.jakewharton.timber:timber:5.0.1")
 
     // hilt
     val hiltVersion = "2.47"
     implementation("com.google.dagger:hilt-android:$hiltVersion")
-    kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
+    ksp("com.google.dagger:hilt-android-compiler:$hiltVersion")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     // Firebase
@@ -134,8 +131,4 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")
-}
-// Allow references to generated code
-kapt {
-    correctErrorTypes = true
 }

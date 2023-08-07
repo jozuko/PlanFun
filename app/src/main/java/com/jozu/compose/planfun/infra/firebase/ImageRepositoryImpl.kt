@@ -1,11 +1,15 @@
 package com.jozu.compose.planfun.infra.firebase
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.jozu.compose.planfun.domain.ImageMergeStatus
-import com.jozu.compose.planfun.domain.ImageRepository
+import com.jozu.compose.planfun.domain.image.Image
+import com.jozu.compose.planfun.domain.image.ImageMergeStatus
+import com.jozu.compose.planfun.domain.image.ImageRepository
+import com.jozu.compose.planfun.domain.image.ImageUploadStatus
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +20,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.io.File
+import java.io.FileOutputStream
 import javax.inject.Inject
 
 /**
@@ -50,6 +55,30 @@ class ImageRepositoryImpl @Inject constructor(
             }
             return imagesDir
         }
+
+    @Suppress("BlockingMethodInNonBlockingContext")
+    override fun upload(bitmap: Bitmap): Flow<ImageUploadStatus<Image>> {
+        return flow<ImageUploadStatus<Image>> {
+            // save to File
+            val imageFile = File(imagesDir, "${System.currentTimeMillis()}.jpg")
+            imageFile.createNewFile()
+            FileOutputStream(imageFile).use { outputStream ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            }
+
+            // upload
+            val imagesRef: StorageReference = imagesRef ?: throw Throwable("user unauthorized")
+            val imageRef = imagesRef.child(imageFile.name)
+            val fileUri = Uri.fromFile(imageFile)
+            imageRef.putFile(fileUri).await()
+
+            emit(ImageUploadStatus.Success(Image(imageFile.name)))
+        }.onStart {
+            emit(ImageUploadStatus.Start)
+        }.catch { cause ->
+            emit(ImageUploadStatus.Error(cause))
+        }.flowOn(dispatcher)
+    }
 
     override fun merge(): Flow<ImageMergeStatus> {
         return flow<ImageMergeStatus> {

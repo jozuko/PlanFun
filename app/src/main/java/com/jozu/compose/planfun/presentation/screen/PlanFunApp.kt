@@ -17,7 +17,7 @@ import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.jozu.compose.planfun.domain.AccountFuture
+import com.jozu.compose.planfun.domain.account.AccountStatus
 import com.jozu.compose.planfun.presentation.common.LoadingManager
 import com.jozu.compose.planfun.presentation.screen.init.InitScreen
 import com.jozu.compose.planfun.presentation.screen.signin.SignInScreen
@@ -54,19 +54,19 @@ fun PlanFunApp(viewModel: PlanFunAppViewModel = hiltViewModel()) {
 
                     Box(modifier = contentBoxModifier) {
                         when (accountState.value) {
-                            is AccountFuture.Authorized -> {
+                            is AccountStatus.Authorized -> {
                                 InitScreen()
                             }
 
-                            is AccountFuture.Unauthorized -> {
+                            is AccountStatus.Unauthorized -> {
                                 SignInScreen()
                             }
 
-                            is AccountFuture.Proceeding -> {
+                            is AccountStatus.Proceeding -> {
                                 SplashScreen()
                             }
 
-                            is AccountFuture.Error -> {
+                            is AccountStatus.Error -> {
                                 Text("auth Error")
                             }
                         }

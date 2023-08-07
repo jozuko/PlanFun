@@ -1,4 +1,4 @@
-package com.jozu.compose.planfun.domain
+package com.jozu.compose.planfun.domain.spot
 
 import kotlinx.coroutines.flow.Flow
 

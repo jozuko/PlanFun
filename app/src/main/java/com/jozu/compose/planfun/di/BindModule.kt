@@ -1,8 +1,8 @@
 package com.jozu.compose.planfun.di
 
-import com.jozu.compose.planfun.domain.AccountRepository
-import com.jozu.compose.planfun.domain.ImageRepository
-import com.jozu.compose.planfun.domain.SpotRepository
+import com.jozu.compose.planfun.domain.account.AccountRepository
+import com.jozu.compose.planfun.domain.image.ImageRepository
+import com.jozu.compose.planfun.domain.spot.SpotRepository
 import com.jozu.compose.planfun.infra.firebase.AccountRepositoryImpl
 import com.jozu.compose.planfun.infra.firebase.ImageRepositoryImpl
 import com.jozu.compose.planfun.infra.firebase.SpotRepositoryImpl

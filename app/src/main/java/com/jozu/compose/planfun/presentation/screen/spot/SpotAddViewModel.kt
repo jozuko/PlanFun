@@ -1,11 +1,15 @@
 package com.jozu.compose.planfun.presentation.screen.spot
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
-import com.jozu.compose.planfun.usecase.SpotAddCase
+import androidx.lifecycle.viewModelScope
+import com.jozu.compose.planfun.presentation.common.LoadingManager
+import com.jozu.compose.planfun.usecase.SpotAddUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.io.File
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -15,12 +19,42 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class SpotAddViewModel @Inject constructor(
-    private val spotAddCase: SpotAddCase,
+    private val spotAddCase: SpotAddUseCase,
 ) : ViewModel() {
-    private val _spotId: MutableState<String> = mutableStateOf("")
-    val spotId get() = _spotId
+    private val _uiState = MutableStateFlow(SpotAddUiState())
+    val uiState = _uiState.asStateFlow()
 
-    private val _spotImage: MutableState<File?> = mutableStateOf(null)
-    val spotImage get() = _spotImage
+    fun onChangeInput(inputField: InputField, newValue: String) {
+        _uiState.update {
+            it.updateInput(inputField, newValue)
+        }
+    }
 
+    fun changeVisibility(visibility: Boolean) {
+        _uiState.update {
+            it.updateVisibility(visibility)
+        }
+    }
+
+    fun add(snapshot: (() -> Bitmap)?) {
+        LoadingManager.showLoading()
+        viewModelScope.launch {
+            val newSpot = _uiState.value.toDomain
+            spotAddCase.add(
+                name = newSpot.name,
+                location = newSpot.location,
+                address = newSpot.address,
+                tel = newSpot.tel,
+                url = newSpot.url,
+                memo = newSpot.memo,
+                photo = snapshot?.invoke(),
+            )
+            LoadingManager.hideLoading()
+            changeVisibility(false)
+        }
+    }
+
+    fun cancel() {
+        changeVisibility(false)
+    }
 }

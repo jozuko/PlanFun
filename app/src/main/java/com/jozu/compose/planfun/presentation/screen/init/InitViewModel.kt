@@ -2,8 +2,8 @@ package com.jozu.compose.planfun.presentation.screen.init
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jozu.compose.planfun.domain.ImageMergeStatus
-import com.jozu.compose.planfun.usecase.ImageGetCase
+import com.jozu.compose.planfun.domain.image.ImageMergeStatus
+import com.jozu.compose.planfun.usecase.ImageGetUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +19,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class InitViewModel @Inject constructor(
-    private val imageGetCase: ImageGetCase,
+    private val imageGetCase: ImageGetUseCase,
 ) : ViewModel() {
     private val _statusFlow: MutableStateFlow<ImageMergeStatus> = MutableStateFlow(ImageMergeStatus.Start)
     val statusFlow = _statusFlow.asStateFlow()

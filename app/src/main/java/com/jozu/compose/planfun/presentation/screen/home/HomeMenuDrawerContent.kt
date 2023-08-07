@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jozu.compose.planfun.R
-import com.jozu.compose.planfun.presentation.common.AppIcon
+import com.jozu.compose.planfun.presentation.common.composable.AppIcon
 import com.jozu.compose.planfun.presentation.theme.paddingMiddle
 import kotlinx.coroutines.launch
 
