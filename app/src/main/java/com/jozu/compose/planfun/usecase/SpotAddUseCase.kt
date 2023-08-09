@@ -5,8 +5,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.jozu.compose.planfun.domain.image.Image
 import com.jozu.compose.planfun.domain.image.ImageRepository
 import com.jozu.compose.planfun.domain.image.ImageUploadStatus
-import com.jozu.compose.planfun.domain.spot.Spot
-import com.jozu.compose.planfun.domain.spot.SpotFuture
 import com.jozu.compose.planfun.domain.spot.SpotRepository
 import kotlinx.coroutines.flow.last
 import timber.log.Timber
@@ -28,18 +26,10 @@ class SpotAddUseCase @Inject constructor(
         tel: String,
         url: String,
         memo: String,
-        photo: Bitmap?,
-    ): SpotFuture<Spot> {
-        val spot = Spot.newSpot(
-            name = name,
-            location = location,
-            address = address,
-            tel = tel,
-            url = url,
-            imageName = uploadImage(photo)?.name,
-            memo = memo,
-        )
-        return spotRepository.add(spot).last()
+        image: Bitmap?,
+    ) {
+        val imageName = uploadImage(image)?.name ?: ""
+        spotRepository.add(name, location, address, tel, url, memo, imageName).last()
     }
 
     private suspend fun uploadImage(photo: Bitmap?): Image? {

@@ -1,6 +1,7 @@
 package com.jozu.compose.planfun.presentation.screen.spot
 
 import android.graphics.Bitmap
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,17 +13,23 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.RotateRight
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -65,7 +72,7 @@ fun SpotAddScreen(onDismissRequest: () -> Unit, viewModel: SpotAddViewModel = hi
                 .padding(paddingMiddle)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                snapshot = photoImage(uiState)
+                snapshot = photoImage(uiState, onClickImageRotate = viewModel::rotateImage)
                 SpotName(uiState) { viewModel.onChangeInput(InputField.NAME, it) }
             }
 
@@ -92,22 +99,33 @@ fun SpotAddScreen(onDismissRequest: () -> Unit, viewModel: SpotAddViewModel = hi
 }
 
 @Composable
-private fun photoImage(uiState: SpotAddUiState): (() -> Bitmap)? {
+private fun photoImage(
+    uiState: SpotAddUiState,
+    onClickImageRotate: () -> Unit,
+): (() -> Bitmap)? {
     var snapshot: (() -> Bitmap)? = null
+    val angle: Float by animateFloatAsState(targetValue = uiState.imageAngle, label = "")
 
     Box(modifier = Modifier.clip(RoundedCornerShape(roundedMiddle))) {
         snapshot = captureBitmap {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(uiState.image ?: R.mipmap.photo_placeholder)
+                    .data(uiState.image.ifEmpty { R.mipmap.photo_placeholder })
                     .allowHardware(false)
                     .build(),
                 placeholder = painterResource(id = R.mipmap.photo_placeholder),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .size(100.dp)
+                    .size(150.dp)
+                    .rotate(angle)
             )
+        }
+        FilledIconButton(
+            modifier = Modifier.align(Alignment.BottomEnd),
+            onClick = onClickImageRotate,
+        ) {
+            Icon(imageVector = Icons.Rounded.RotateRight, contentDescription = null)
         }
     }
 

@@ -30,6 +30,12 @@ class SpotAddViewModel @Inject constructor(
         }
     }
 
+    fun rotateImage() {
+        _uiState.update {
+            it.rotateImage()
+        }
+    }
+
     fun changeVisibility(visibility: Boolean) {
         _uiState.update {
             it.updateVisibility(visibility)
@@ -39,15 +45,14 @@ class SpotAddViewModel @Inject constructor(
     fun add(snapshot: (() -> Bitmap)?) {
         LoadingManager.showLoading()
         viewModelScope.launch {
-            val newSpot = _uiState.value.toDomain
             spotAddCase.add(
-                name = newSpot.name,
-                location = newSpot.location,
-                address = newSpot.address,
-                tel = newSpot.tel,
-                url = newSpot.url,
-                memo = newSpot.memo,
-                photo = snapshot?.invoke(),
+                name = _uiState.value.name,
+                location = _uiState.value.location,
+                address = _uiState.value.address,
+                tel = _uiState.value.tel,
+                url = _uiState.value.url,
+                memo = _uiState.value.memo,
+                image = snapshot?.invoke(),
             )
             LoadingManager.hideLoading()
             changeVisibility(false)

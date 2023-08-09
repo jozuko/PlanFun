@@ -1,5 +1,6 @@
 package com.jozu.compose.planfun.domain.spot
 
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -9,6 +10,6 @@ import kotlinx.coroutines.flow.Flow
  */
 interface SpotRepository {
     val spotListFlow: Flow<List<SpotChange>>
-    fun getAll(): Flow<SpotFuture<List<Spot>>>
-    fun add(spot: Spot): Flow<SpotFuture<Spot>>
+    fun getAll(): Flow<SpotStatus<List<Spot>>>
+    fun add(name: String, location: LatLng?, address: String, tel: String, url: String, memo: String, imageName: String): Flow<SpotStatus<String>>
 }

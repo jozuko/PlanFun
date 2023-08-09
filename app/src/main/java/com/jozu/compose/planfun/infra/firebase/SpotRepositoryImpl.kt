@@ -1,5 +1,6 @@
 package com.jozu.compose.planfun.infra.firebase
 
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
@@ -10,8 +11,8 @@ import com.google.firebase.firestore.ktx.snapshots
 import com.google.firebase.firestore.ktx.toObject
 import com.jozu.compose.planfun.domain.spot.Spot
 import com.jozu.compose.planfun.domain.spot.SpotChange
-import com.jozu.compose.planfun.domain.spot.SpotFuture
 import com.jozu.compose.planfun.domain.spot.SpotRepository
+import com.jozu.compose.planfun.domain.spot.SpotStatus
 import com.jozu.compose.planfun.infra.firebase.model.FirestoreSpot
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
@@ -59,7 +60,7 @@ class SpotRepositoryImpl @Inject constructor(
                     try {
                         snapshotQuery?.documentChanges?.mapNotNull { documentChange ->
                             val firestoreSpot = documentChange.document.toObject<FirestoreSpot>()
-                            val spot = firestoreSpot.toDomain() ?: return@mapNotNull null
+                            val spot = firestoreSpot.toDomain()
                             val type = when (documentChange.type) {
                                 DocumentChange.Type.ADDED -> SpotChange.Type.ADDED
                                 DocumentChange.Type.MODIFIED -> SpotChange.Type.MODIFIED
@@ -79,8 +80,8 @@ class SpotRepositoryImpl @Inject constructor(
             awaitClose { registrationListener.remove() }
         }
 
-    override fun getAll(): Flow<SpotFuture<List<Spot>>> {
-        val spotListRef = this.spotListRef ?: return flowOf(SpotFuture.Error(Throwable("user unauthorized")))
+    override fun getAll(): Flow<SpotStatus<List<Spot>>> {
+        val spotListRef = this.spotListRef ?: return flowOf(SpotStatus.Error(Throwable("user unauthorized")))
 
         return spotListRef
             .snapshots()
@@ -89,35 +90,35 @@ class SpotRepositoryImpl @Inject constructor(
                     documentSnapshot.toObject<FirestoreSpot>()
                 }
                 @Suppress("USELESS_CAST")
-                SpotFuture.Success(
+                SpotStatus.Success(
                     firestoreSpotList.mapNotNull {
                         it?.toDomain()
                     }
-                ) as SpotFuture<List<Spot>>
+                ) as SpotStatus<List<Spot>>
             }
             .catch { cause ->
-                emit(SpotFuture.Error(cause))
+                emit(SpotStatus.Error(cause))
             }
             .flowOn(dispatcher)
     }
 
-    override fun add(spot: Spot): Flow<SpotFuture<Spot>> {
-        val spotListRef = this.spotListRef ?: return flowOf(SpotFuture.Error(Throwable("user unauthorized")))
+    override fun add(name: String, location: LatLng?, address: String, tel: String, url: String, memo: String, imageName: String): Flow<SpotStatus<String>> {
+        val spotListRef = this.spotListRef ?: return flowOf(SpotStatus.Error(Throwable("user unauthorized")))
 
-        return flow<SpotFuture<Spot>> {
+        return flow<SpotStatus<String>> {
             val docRef = spotListRef
-                .add(FirestoreSpot.fromSpot(spot))
+                .add(FirestoreSpot.fromInput(name, location, address, tel, url, memo, imageName))
                 .addOnFailureListener {
                     throw it
                 }
                 .await()
 
             Timber.d("<SpotRepository>add ${docRef.id}")
-            emit(SpotFuture.Success(spot.copy(id = docRef.id)))
+            emit(SpotStatus.Success(docRef.id))
         }.onStart {
-            emit(SpotFuture.Proceeding)
+            emit(SpotStatus.Proceeding)
         }.catch { cause ->
-            emit(SpotFuture.Error(cause))
+            emit(SpotStatus.Error(cause))
         }.flowOn(dispatcher)
     }
 }

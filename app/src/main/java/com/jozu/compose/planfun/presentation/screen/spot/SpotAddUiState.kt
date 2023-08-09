@@ -2,8 +2,6 @@ package com.jozu.compose.planfun.presentation.screen.spot
 
 import androidx.compose.runtime.Stable
 import com.google.android.gms.maps.model.LatLng
-import com.jozu.compose.planfun.domain.spot.Spot
-import java.io.File
 
 /**
  *
@@ -12,7 +10,8 @@ import java.io.File
  */
 @Stable
 data class SpotAddUiState(
-    val image: File? = null,
+    val image: String = "",
+    val imageAngle: Float = 0f,
     val name: String = "",
     val latitude: String = "",
     val longitude: String = "",
@@ -38,21 +37,15 @@ data class SpotAddUiState(
         return copy(visible = visible)
     }
 
-    val toDomain: Spot
-        get() {
-            val lat = latitude.toDoubleOrNull()
-            val lon = longitude.toDoubleOrNull()
-            val location = if (lat != null && lon != null) LatLng(lat, lon) else null
+    fun rotateImage(): SpotAddUiState {
+        return copy(imageAngle = imageAngle + 90f)
+    }
 
-            return Spot.newSpot(
-                name = name,
-                location = location,
-                address = address,
-                tel = tel,
-                url = url,
-                imageName = null,
-                memo = memo,
-            )
+    val location: LatLng?
+        get() {
+            val lat = latitude.toDoubleOrNull() ?: return null
+            val lon = longitude.toDoubleOrNull() ?: return null
+            return LatLng(lat, lon)
         }
 }
 

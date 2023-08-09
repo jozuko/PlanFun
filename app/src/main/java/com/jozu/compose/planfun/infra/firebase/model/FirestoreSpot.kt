@@ -17,34 +17,34 @@ data class FirestoreSpot(
     val address: String? = null,
     val tel: String? = null,
     val url: String? = null,
-    val imageName: String? = null,
     val memo: String? = null,
+    val imageName: String? = null,
 ) {
     companion object {
-        fun fromSpot(spot: Spot): FirestoreSpot {
+        fun fromInput(name: String, location: LatLng?, address: String, tel: String, url: String, memo: String, imageName: String): FirestoreSpot {
             return FirestoreSpot(
-                id = spot.id,
-                name = spot.name,
-                location = spot.location?.let { GeoPoint(it.latitude, it.longitude) },
-                address = spot.address,
-                tel = spot.tel,
-                url = spot.url,
-                imageName = spot.imageName,
-                memo = spot.memo,
+                id = null,
+                name = name,
+                location = location?.let { GeoPoint(it.latitude, it.longitude) },
+                address = address,
+                tel = tel,
+                url = url,
+                memo = memo,
+                imageName = imageName,
             )
         }
     }
 
-    fun toDomain(): Spot? {
+    fun toDomain(): Spot {
         return Spot(
             id = id,
             name = name ?: "",
-            location = location?.let { LatLng(it.latitude, it.longitude) } ?: return null,
+            location = location?.let { LatLng(it.latitude, it.longitude) },
             address = address ?: "",
             tel = tel ?: "",
             url = url ?: "",
-            imageName = imageName ?: "",
             memo = memo ?: "",
+            imageName = imageName ?: "",
         )
     }
 }

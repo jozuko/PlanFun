@@ -16,27 +16,4 @@ data class Spot(
     val url: String,
     val imageName: String?,
     val memo: String,
-) {
-    companion object {
-        fun newSpot(
-            name: String,
-            location: LatLng?,
-            address: String,
-            tel: String,
-            url: String,
-            imageName: String?,
-            memo: String,
-        ): Spot {
-            return Spot(
-                id = null,
-                name = name,
-                location = location,
-                address = address,
-                tel = tel,
-                url = url,
-                imageName = imageName,
-                memo = memo,
-            )
-        }
-    }
-}
+)

@@ -1,8 +1,8 @@
 package com.jozu.compose.planfun.usecase
 
 import com.jozu.compose.planfun.domain.spot.Spot
-import com.jozu.compose.planfun.domain.spot.SpotFuture
 import com.jozu.compose.planfun.domain.spot.SpotRepository
+import com.jozu.compose.planfun.domain.spot.SpotStatus
 import kotlinx.coroutines.flow.last
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class SpotGetUseCase @Inject constructor(
     private val spotRepository: SpotRepository,
 ) {
-    suspend fun getInitialData(): SpotFuture<List<Spot>> {
+    suspend fun getInitialData(): SpotStatus<List<Spot>> {
         return spotRepository.getAll().last()
     }
 }
