@@ -94,6 +94,10 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:$composeVersion")
     implementation("androidx.compose.material:material-icons-extended:$composeVersion")
     implementation("androidx.compose.material3:material3:1.1.1")
+    // depend on it to compile against version 34 or later of the Android APIs.となるので、Gradleが34対応ができるまでは古いバージョンを使う。
+    // implementation("androidx.navigation:navigation-compose:2.7.0-rc01")
+    //noinspection GradleDependency
+    implementation("androidx.navigation:navigation-compose:2.7.0-beta01")
 
     // coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")

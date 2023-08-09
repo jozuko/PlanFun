@@ -15,12 +15,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.RotateRight
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -52,48 +51,62 @@ import timber.log.Timber
  * Created by jozuko on 2023/08/02.
  * Copyright (c) 2023 Studio Jozu. All rights reserved.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SpotAddScreen(onDismissRequest: () -> Unit, viewModel: SpotAddViewModel = hiltViewModel()) {
+fun SpotAddScreen(onNavigateToBack: () -> Unit, viewModel: SpotAddViewModel = hiltViewModel()) {
     val uiState = viewModel.uiState.collectAsState().value
-    if (!uiState.visible) {
-        Timber.d("SpotAddScreen onDismissRequest")
-        onDismissRequest()
-        viewModel.changeVisibility(true)
+
+    Scaffold { paddingValues ->
+        Box(modifier = Modifier.padding(paddingValues)) {
+            Contents(uiState, onNavigateToBack)
+        }
     }
 
+//    val modalSheetState = rememberModalBottomSheetState()
+//    AlertDialog(
+//        onDismissRequest = onDismissRequest,
+//    ) {
+//        Contents(uiState)
+//    }
+//    ModalBottomSheet(
+//        onDismissRequest = {},
+//        sheetState = modalSheetState,
+//        shape = RoundedCornerShape(topStart = roundedLarge, topEnd = roundedLarge),
+//        content = {
+//            Text(text = "BottomSheet!!")
+//        },
+//    )
+}
+
+@Composable
+private fun Contents(uiState: SpotAddUiState, onNavigateToBack: () -> Unit, viewModel: SpotAddViewModel = hiltViewModel()) {
     var snapshot: (() -> Bitmap)? = null
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
+    Column(
+        Modifier
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(paddingMiddle)
     ) {
-        Column(
-            Modifier
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(paddingMiddle)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            snapshot = photoImage(uiState, onClickImageRotate = viewModel::rotateImage)
+            SpotName(uiState) { viewModel.onChangeInput(InputField.NAME, it) }
+        }
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            SpotLatitude(uiState) { viewModel.onChangeInput(InputField.LATITUDE, it) }
+            SpotLongitude(uiState) { viewModel.onChangeInput(InputField.LONGITUDE, it) }
+        }
+
+        SpotAddress(uiState) { viewModel.onChangeInput(InputField.ADDRESS, it) }
+        SpotUrl(uiState) { viewModel.onChangeInput(InputField.URL, it) }
+        SpotTel(uiState) { viewModel.onChangeInput(InputField.TEL, it) }
+        SpotMemo(uiState) { viewModel.onChangeInput(InputField.MEMO, it) }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                snapshot = photoImage(uiState, onClickImageRotate = viewModel::rotateImage)
-                SpotName(uiState) { viewModel.onChangeInput(InputField.NAME, it) }
-            }
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                SpotLatitude(uiState) { viewModel.onChangeInput(InputField.LATITUDE, it) }
-                SpotLongitude(uiState) { viewModel.onChangeInput(InputField.LONGITUDE, it) }
-            }
-
-            SpotAddress(uiState) { viewModel.onChangeInput(InputField.ADDRESS, it) }
-            SpotUrl(uiState) { viewModel.onChangeInput(InputField.URL, it) }
-            SpotTel(uiState) { viewModel.onChangeInput(InputField.TEL, it) }
-            SpotMemo(uiState) { viewModel.onChangeInput(InputField.MEMO, it) }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End,
-            ) {
-                CancelButton(onClick = viewModel::cancel)
-                AddButton(onClick = { viewModel.add(snapshot) })
-            }
+            CancelButton(onClick = { viewModel.cancel(onNavigateToBack) })
+            AddButton(onClick = { viewModel.add(snapshot, onNavigateToBack) })
         }
     }
 }
@@ -105,8 +118,14 @@ private fun photoImage(
 ): (() -> Bitmap)? {
     var snapshot: (() -> Bitmap)? = null
     val angle: Float by animateFloatAsState(targetValue = uiState.imageAngle, label = "")
+    val imageSize = 150.dp
+    Timber.d("photoImage::${uiState.image}")
 
-    Box(modifier = Modifier.clip(RoundedCornerShape(roundedMiddle))) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(roundedMiddle))
+            .size(imageSize)
+    ) {
         snapshot = captureBitmap {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -117,7 +136,7 @@ private fun photoImage(
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .size(150.dp)
+                    .size(imageSize)
                     .rotate(angle)
             )
         }

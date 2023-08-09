@@ -36,13 +36,7 @@ class SpotAddViewModel @Inject constructor(
         }
     }
 
-    fun changeVisibility(visibility: Boolean) {
-        _uiState.update {
-            it.updateVisibility(visibility)
-        }
-    }
-
-    fun add(snapshot: (() -> Bitmap)?) {
+    fun add(snapshot: (() -> Bitmap)?, onNavigateToBack: () -> Unit) {
         LoadingManager.showLoading()
         viewModelScope.launch {
             spotAddCase.add(
@@ -55,11 +49,11 @@ class SpotAddViewModel @Inject constructor(
                 image = snapshot?.invoke(),
             )
             LoadingManager.hideLoading()
-            changeVisibility(false)
+            onNavigateToBack()
         }
     }
 
-    fun cancel() {
-        changeVisibility(false)
+    fun cancel(onNavigateToBack: () -> Unit) {
+        onNavigateToBack()
     }
 }

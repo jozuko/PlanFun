@@ -19,7 +19,6 @@ data class SpotAddUiState(
     val tel: String = "",
     val url: String = "",
     val memo: String = "",
-    val visible: Boolean = true,
 ) {
     fun updateInput(inputField: InputField, newValue: String): SpotAddUiState {
         return when (inputField) {
@@ -31,10 +30,6 @@ data class SpotAddUiState(
             InputField.URL -> copy(url = newValue)
             InputField.MEMO -> copy(memo = newValue)
         }
-    }
-
-    fun updateVisibility(visible: Boolean): SpotAddUiState {
-        return copy(visible = visible)
     }
 
     fun rotateImage(): SpotAddUiState {

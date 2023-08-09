@@ -1,6 +1,5 @@
 package com.jozu.compose.planfun.presentation.screen.spot
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,6 +26,7 @@ import com.jozu.compose.planfun.R
 @Composable
 fun SpotListScreen(
     viewModel: SpotListViewModel = hiltViewModel(),
+    onNavigateToSpotAdd: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsState().value
 
@@ -36,17 +36,13 @@ fun SpotListScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = viewModel::onShowAdd) {
+            FloatingActionButton(onClick = onNavigateToSpotAdd) {
                 Icon(imageVector = Icons.Rounded.Add, contentDescription = stringResource(id = R.string.spot_add_spot))
             }
         }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             SpotList(uiState)
-
-            AnimatedVisibility(visible = uiState.isShowAddDialog) {
-                SpotAddScreen(viewModel::onDismissAdd)
-            }
         }
     }
 }

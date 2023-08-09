@@ -12,13 +12,8 @@ import com.jozu.compose.planfun.domain.spot.Spot
 @Stable
 data class SpotListUiState(
     val spotList: List<Spot> = emptyList(),
-    val isShowAddDialog: Boolean = false,
 ) {
     fun updateSpotList(spotList: List<Spot>): SpotListUiState {
         return copy(spotList = spotList)
-    }
-
-    fun changeAddDialogVisibility(visible: Boolean): SpotListUiState {
-        return copy(isShowAddDialog = visible)
     }
 }

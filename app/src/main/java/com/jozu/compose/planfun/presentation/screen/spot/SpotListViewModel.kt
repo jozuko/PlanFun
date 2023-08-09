@@ -46,16 +46,4 @@ class SpotListViewModel @Inject constructor(
             }
         }
     }
-
-    fun onShowAdd() {
-        _uiState.update {
-            it.changeAddDialogVisibility(true)
-        }
-    }
-
-    fun onDismissAdd() {
-        _uiState.update {
-            it.changeAddDialogVisibility(false)
-        }
-    }
 }
