@@ -3,7 +3,6 @@ package com.jozu.compose.planfun.presentation.screen.spot
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jozu.compose.planfun.domain.spot.SpotStatus
-import com.jozu.compose.planfun.usecase.SpotAddUseCase
 import com.jozu.compose.planfun.usecase.SpotGetUseCase
 import com.jozu.compose.planfun.usecase.SpotWatchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +21,6 @@ import javax.inject.Inject
 class SpotListViewModel @Inject constructor(
     private val spotGetCase: SpotGetUseCase,
     private val spotWatchCase: SpotWatchUseCase,
-    private val spotAddCase: SpotAddUseCase,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<SpotListUiState> = MutableStateFlow(SpotListUiState())
     val uiState = _uiState.asStateFlow()

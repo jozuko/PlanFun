@@ -1,5 +1,7 @@
 package com.jozu.compose.planfun.presentation.screen.spot
 
+import android.Manifest
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,6 +31,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.jozu.compose.planfun.R
 import com.jozu.compose.planfun.presentation.common.composable.SingleLineTextField
 import com.jozu.compose.planfun.presentation.theme.paddingSmall
@@ -60,6 +66,7 @@ fun PhotoSelectBottomSheet(
             ) {
                 UrlInput(onEnterUrl)
                 ImagePickerButton(onEnterUrl)
+                CameraButton(onDismissRequest, onEnterUrl)
             }
         }
     }
@@ -117,3 +124,45 @@ private fun ImagePickerButton(onEnterUrl: (url: String) -> Unit) {
         },
     )
 }
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+private fun CameraButton(onDismissRequest: () -> Unit, onEnterUrl: (url: String) -> Unit, viewModel: PhotoSelectViewModel = hiltViewModel()) {
+    var uri: Uri? = null
+    val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+        if (success) {
+            onEnterUrl(uri.toString())
+        }
+    }
+
+    fun openCamera() {
+        uri = viewModel.getImageUri()
+        cameraLauncher.launch(uri)
+    }
+
+    val permissionState = rememberPermissionState(Manifest.permission.CAMERA) { granted ->
+        if (granted) {
+            openCamera()
+        } else {
+            onDismissRequest()
+        }
+    }
+
+    ListItem(
+        headlineContent = {
+            TextButton(
+                onClick = {
+                    if (permissionState.status.isGranted) {
+                        openCamera()
+                    } else {
+                        permissionState.launchPermissionRequest()
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(stringResource(id = R.string.select_image_from_camera))
+            }
+        },
+    )
+}
+

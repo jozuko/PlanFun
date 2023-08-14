@@ -98,6 +98,8 @@ dependencies {
     // implementation("androidx.navigation:navigation-compose:2.7.0-rc01")
     //noinspection GradleDependency
     implementation("androidx.navigation:navigation-compose:2.7.0-beta01")
+    // permission
+    implementation("com.google.accompanist:accompanist-permissions:0.30.1")
 
     // coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
