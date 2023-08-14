@@ -3,9 +3,9 @@
 
     <string name="add">追加</string>
 
-    <string name="drawer_menu_plan">旅の計画</string>
-    <string name="drawer_menu_spot">スポット</string>
-    <string name="drawer_menu_sign_out">Sign Out</string>
+    <string name="tab_menu_plan">旅の計画</string>
+    <string name="tab_menu_spot">スポット</string>
+    <string name="tab_menu_account">アカウント</string>
 
     <string name="signin_title">ログイン</string>
     <string name="signin_message">このアプリを使用するにはログインが必要です。</string>
@@ -27,4 +27,9 @@
     <string name="spot_url_placeholder">URL</string>
     <string name="spot_tel_placeholder">電話番号</string>
     <string name="spot_memo_placeholder">メモ</string>
+
+    <string name="select_image_from_url_title">画像のURLを入力</string>
+    <string name="select_image_from_url_hint">https://</string>
+    <string name="or">or</string>
+    <string name="select_image_from_picker">端末内の画像を選択</string>
 </resources>

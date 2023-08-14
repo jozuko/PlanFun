@@ -3,28 +3,46 @@ package com.jozu.compose.planfun.presentation.screen.spot
 import android.graphics.Bitmap
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.rounded.RotateRight
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +51,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -61,20 +81,13 @@ fun SpotAddScreen(onNavigateToBack: () -> Unit, viewModel: SpotAddViewModel = hi
         }
     }
 
-//    val modalSheetState = rememberModalBottomSheetState()
-//    AlertDialog(
-//        onDismissRequest = onDismissRequest,
-//    ) {
-//        Contents(uiState)
-//    }
-//    ModalBottomSheet(
-//        onDismissRequest = {},
-//        sheetState = modalSheetState,
-//        shape = RoundedCornerShape(topStart = roundedLarge, topEnd = roundedLarge),
-//        content = {
-//            Text(text = "BottomSheet!!")
-//        },
-//    )
+    PhotoSelectBottomSheet(
+        uiState,
+        onDismissRequest = {
+            viewModel.changeVisibilitySelectPhotoSheet(false)
+        },
+        onEnterUrl = viewModel::onEnterImageUrl,
+    )
 }
 
 @Composable
@@ -83,10 +96,15 @@ private fun Contents(uiState: SpotAddUiState, onNavigateToBack: () -> Unit, view
     Column(
         Modifier
             .background(MaterialTheme.colorScheme.surface)
+            .verticalScroll(rememberScrollState())
             .padding(paddingMiddle)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            snapshot = photoImage(uiState, onClickImageRotate = viewModel::rotateImage)
+            snapshot = photoImage(
+                uiState,
+                onClickImage = { viewModel.changeVisibilitySelectPhotoSheet(true) },
+                onClickImageRotate = viewModel::rotateImage,
+            )
             SpotName(uiState) { viewModel.onChangeInput(InputField.NAME, it) }
         }
 
@@ -114,6 +132,7 @@ private fun Contents(uiState: SpotAddUiState, onNavigateToBack: () -> Unit, view
 @Composable
 private fun photoImage(
     uiState: SpotAddUiState,
+    onClickImage: () -> Unit,
     onClickImageRotate: () -> Unit,
 ): (() -> Bitmap)? {
     var snapshot: (() -> Bitmap)? = null
@@ -125,6 +144,9 @@ private fun photoImage(
         modifier = Modifier
             .clip(RoundedCornerShape(roundedMiddle))
             .size(imageSize)
+            .clickable {
+                onClickImage()
+            }
     ) {
         snapshot = captureBitmap {
             AsyncImage(
@@ -156,11 +178,12 @@ private fun SpotName(uiState: SpotAddUiState, onNewValue: (String) -> Unit) {
     SingleLineTextField(
         value = uiState.name,
         onNewValue = onNewValue,
-        placeholder = stringResource(id = R.string.spot_name_placeholder),
+        label = stringResource(id = R.string.spot_name_placeholder),
         modifier = Modifier
             .fillMaxWidth()
             .padding(paddingSmall),
-        leadingIcon = null,
+        leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
+        keyboardType = KeyboardType.Text,
     )
 }
 
@@ -169,11 +192,12 @@ private fun SpotAddress(uiState: SpotAddUiState, onNewValue: (String) -> Unit) {
     SingleLineTextField(
         value = uiState.address,
         onNewValue = onNewValue,
-        placeholder = stringResource(id = R.string.spot_address_placeholder),
+        label = stringResource(id = R.string.spot_address_placeholder),
         modifier = Modifier
             .fillMaxWidth()
             .padding(paddingSmall),
         leadingIcon = null,
+        keyboardType = KeyboardType.Text,
     )
 }
 
@@ -182,11 +206,12 @@ private fun RowScope.SpotLatitude(uiState: SpotAddUiState, onNewValue: (String) 
     SingleLineTextField(
         value = uiState.latitude,
         onNewValue = onNewValue,
-        placeholder = stringResource(id = R.string.spot_latitude_placeholder),
+        label = stringResource(id = R.string.spot_latitude_placeholder),
         modifier = Modifier
             .weight(1f)
             .padding(paddingSmall),
         leadingIcon = null,
+        keyboardType = KeyboardType.Decimal,
     )
 }
 
@@ -195,11 +220,12 @@ private fun RowScope.SpotLongitude(uiState: SpotAddUiState, onNewValue: (String)
     SingleLineTextField(
         value = uiState.longitude,
         onNewValue = onNewValue,
-        placeholder = stringResource(id = R.string.spot_longitude_placeholder),
+        label = stringResource(id = R.string.spot_longitude_placeholder),
         modifier = Modifier
             .weight(1f)
             .padding(paddingSmall),
         leadingIcon = null,
+        keyboardType = KeyboardType.Decimal,
     )
 }
 
@@ -208,11 +234,12 @@ private fun SpotUrl(uiState: SpotAddUiState, onNewValue: (String) -> Unit) {
     SingleLineTextField(
         value = uiState.url,
         onNewValue = onNewValue,
-        placeholder = stringResource(id = R.string.spot_url_placeholder),
+        label = stringResource(id = R.string.spot_url_placeholder),
         modifier = Modifier
             .fillMaxWidth()
             .padding(paddingSmall),
-        leadingIcon = null,
+        leadingIcon = { Icon(Icons.Default.Public, contentDescription = null) },
+        keyboardType = KeyboardType.Uri,
     )
 }
 
@@ -221,11 +248,12 @@ private fun SpotTel(uiState: SpotAddUiState, onNewValue: (String) -> Unit) {
     SingleLineTextField(
         value = uiState.tel,
         onNewValue = onNewValue,
-        placeholder = stringResource(id = R.string.spot_tel_placeholder),
+        label = stringResource(id = R.string.spot_tel_placeholder),
         modifier = Modifier
             .fillMaxWidth()
             .padding(paddingSmall),
-        leadingIcon = null,
+        leadingIcon = { Icon(Icons.Default.Phone, contentDescription = null) },
+        keyboardType = KeyboardType.Phone,
     )
 }
 
@@ -234,7 +262,7 @@ private fun SpotMemo(uiState: SpotAddUiState, onNewValue: (String) -> Unit) {
     MultiLineTextField(
         value = uiState.memo,
         onNewValue = onNewValue,
-        placeholder = stringResource(id = R.string.spot_memo_placeholder),
+        label = stringResource(id = R.string.spot_memo_placeholder),
         modifier = Modifier
             .fillMaxWidth()
             .height(180.dp)
@@ -254,5 +282,46 @@ private fun AddButton(onClick: () -> Unit) {
 private fun CancelButton(onClick: () -> Unit) {
     TextButton(onClick = onClick) {
         Text(stringResource(id = android.R.string.cancel))
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PhotoSelectBottomSheet(uiState: SpotAddUiState, onDismissRequest: () -> Unit, onEnterUrl: (url: String) -> Unit) {
+    val modalSheetState = rememberModalBottomSheetState()
+    var inputValue by remember { mutableStateOf("") }
+
+    if (uiState.isVisibleSelectPhotoSheet) {
+        ModalBottomSheet(
+            onDismissRequest = onDismissRequest,
+            sheetState = modalSheetState,
+            windowInsets = WindowInsets.systemBars,
+        ) {
+            Column(
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .fillMaxSize()
+            ) {
+                ListItem(
+                    headlineContent = {
+                        SingleLineTextField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(paddingSmall),
+                            value = inputValue,
+                            label = stringResource(id = R.string.select_image_from_url_title),
+                            placeholder = stringResource(id = R.string.select_image_from_url_hint),
+                            onNewValue = { inputValue = it },
+                            leadingIcon = { Icon(Icons.Default.Public, contentDescription = null) },
+                            keyboardType = KeyboardType.Uri,
+                            imeAction = ImeAction.Done,
+                            keyboardActions = KeyboardActions(onDone = {
+                                onEnterUrl.invoke(inputValue)
+                            })
+                        )
+                    },
+                )
+            }
+        }
     }
 }

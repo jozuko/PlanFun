@@ -13,10 +13,12 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.jozu.compose.planfun.R
 
 /**
  * NavigationBar＋NavHostの実装
@@ -27,21 +29,21 @@ import androidx.navigation.compose.currentBackStackEntryAsState
  */
 private val barItems = listOf(
     BottomNavItem(
-        label = "plan",
+        label = R.string.tab_menu_plan,
         icon = Icons.Outlined.ListAlt,
         iconSelected = Icons.Filled.ListAlt,
         route = NavRoute.Plan.route,
         startDestination = NavRoute.Plan.PlanList.route,
     ),
     BottomNavItem(
-        label = "spot",
+        label = R.string.tab_menu_spot,
         icon = Icons.Outlined.Festival,
         iconSelected = Icons.Filled.Festival,
         route = NavRoute.Spot.route,
         startDestination = NavRoute.Spot.SpotList.route,
     ),
     BottomNavItem(
-        label = "account",
+        label = R.string.tab_menu_account,
         icon = Icons.Outlined.ManageAccounts,
         iconSelected = Icons.Filled.ManageAccounts,
         route = NavRoute.Account.route,
@@ -70,7 +72,7 @@ fun BottomNavigationBar(navController: NavController) {
                         restoreState = true
                     }
                 },
-                label = { Text(bottomNavItem.label) },
+                label = { Text(stringResource(bottomNavItem.label)) },
                 icon = {
                     val imageVector = if (selected) {
                         bottomNavItem.iconSelected

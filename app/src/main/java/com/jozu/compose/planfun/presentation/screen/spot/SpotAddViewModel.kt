@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jozu.compose.planfun.presentation.common.LoadingManager
+import com.jozu.compose.planfun.usecase.ImageGetUseCase
 import com.jozu.compose.planfun.usecase.SpotAddUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SpotAddViewModel @Inject constructor(
     private val spotAddCase: SpotAddUseCase,
+    private val imageGetUseCase: ImageGetUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SpotAddUiState())
     val uiState = _uiState.asStateFlow()
@@ -34,6 +36,19 @@ class SpotAddViewModel @Inject constructor(
         _uiState.update {
             it.rotateImage()
         }
+    }
+
+    fun changeVisibilitySelectPhotoSheet(visible: Boolean) {
+        _uiState.update {
+            it.changeVisibilitySelectPhotoSheet(visible)
+        }
+    }
+
+    fun onEnterImageUrl(url: String) {
+        _uiState.update {
+            it.updateImage(url)
+        }
+        changeVisibilitySelectPhotoSheet(false)
     }
 
     fun add(snapshot: (() -> Bitmap)?, onNavigateToBack: () -> Unit) {

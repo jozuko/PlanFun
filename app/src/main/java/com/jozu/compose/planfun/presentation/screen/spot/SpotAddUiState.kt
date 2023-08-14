@@ -19,7 +19,15 @@ data class SpotAddUiState(
     val tel: String = "",
     val url: String = "",
     val memo: String = "",
+    val isVisibleSelectPhotoSheet: Boolean = false,
 ) {
+    val location: LatLng?
+        get() {
+            val lat = latitude.toDoubleOrNull() ?: return null
+            val lon = longitude.toDoubleOrNull() ?: return null
+            return LatLng(lat, lon)
+        }
+
     fun updateInput(inputField: InputField, newValue: String): SpotAddUiState {
         return when (inputField) {
             InputField.NAME -> copy(name = newValue)
@@ -36,12 +44,13 @@ data class SpotAddUiState(
         return copy(imageAngle = imageAngle + 90f)
     }
 
-    val location: LatLng?
-        get() {
-            val lat = latitude.toDoubleOrNull() ?: return null
-            val lon = longitude.toDoubleOrNull() ?: return null
-            return LatLng(lat, lon)
-        }
+    fun updateImage(url: String): SpotAddUiState {
+        return copy(image = url, imageAngle = 0f)
+    }
+
+    fun changeVisibilitySelectPhotoSheet(visible: Boolean): SpotAddUiState {
+        return copy(isVisibleSelectPhotoSheet = visible)
+    }
 }
 
 enum class InputField {

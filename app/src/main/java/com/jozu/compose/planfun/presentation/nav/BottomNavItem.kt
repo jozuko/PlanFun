@@ -1,5 +1,6 @@
 package com.jozu.compose.planfun.presentation.nav
 
+import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
 
 /**
@@ -8,7 +9,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
  * Copyright (c) 2023 Studio Jozu. All rights reserved.
  */
 data class BottomNavItem(
-    val label: String,
+    @StringRes val label: Int,
     val icon: ImageVector,
     val iconSelected: ImageVector,
     val route: String,
