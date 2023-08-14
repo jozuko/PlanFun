@@ -45,6 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.jozu.compose.planfun.R
+import com.jozu.compose.planfun.presentation.common.coil.transformation.SquareCropTransformation
 import com.jozu.compose.planfun.presentation.common.composable.MultiLineTextField
 import com.jozu.compose.planfun.presentation.common.composable.SingleLineTextField
 import com.jozu.compose.planfun.presentation.common.composable.captureBitmap
@@ -140,6 +141,7 @@ private fun photoImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(uiState.image.ifEmpty { R.mipmap.photo_placeholder })
                     .allowHardware(false)
+                    .transformations(SquareCropTransformation())
                     .build(),
                 placeholder = painterResource(id = R.mipmap.photo_placeholder),
                 contentDescription = null,
