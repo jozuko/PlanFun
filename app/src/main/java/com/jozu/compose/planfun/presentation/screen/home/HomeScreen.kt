@@ -6,8 +6,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.jozu.compose.planfun.presentation.nav.AppNavHost
 import com.jozu.compose.planfun.presentation.nav.BottomNavigationBar
+import com.jozu.compose.planfun.presentation.nav.HomeNavHost
 
 /**
  *
@@ -21,7 +21,7 @@ fun HomeScreen() {
         bottomBar = { BottomNavigationBar(navController = navController) },
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
-            AppNavHost(navController = navController)
+            HomeNavHost(navController = navController)
         }
     }
 }

@@ -16,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.jozu.compose.planfun.R
 
@@ -32,22 +31,22 @@ private val barItems = listOf(
         label = R.string.tab_menu_plan,
         icon = Icons.Outlined.ListAlt,
         iconSelected = Icons.Filled.ListAlt,
-        route = NavRoute.Plan.route,
-        startDestination = NavRoute.Plan.PlanList.route,
+        route = HomeNavRoute.Plan.route,
+        startDestination = HomeNavRoute.Plan.PlanList.route,
     ),
     BottomNavItem(
         label = R.string.tab_menu_spot,
         icon = Icons.Outlined.Festival,
         iconSelected = Icons.Filled.Festival,
-        route = NavRoute.Spot.route,
-        startDestination = NavRoute.Spot.SpotList.route,
+        route = HomeNavRoute.Spot.route,
+        startDestination = HomeNavRoute.Spot.SpotList.route,
     ),
     BottomNavItem(
         label = R.string.tab_menu_account,
         icon = Icons.Outlined.ManageAccounts,
         iconSelected = Icons.Filled.ManageAccounts,
-        route = NavRoute.Account.route,
-        startDestination = NavRoute.Account.AccountMenu.route,
+        route = HomeNavRoute.Account.route,
+        startDestination = HomeNavRoute.Account.AccountMenu.route,
     ),
 )
 
@@ -65,7 +64,7 @@ fun BottomNavigationBar(navController: NavController) {
                 onClick = {
                     val targetRoute = if (selected) bottomNavItem.startDestination else bottomNavItem.route
                     navController.navigate(targetRoute) {
-                        popUpTo(navController.graph.findStartDestination().id) {
+                        popUpTo(navController.graph.id) {
                             saveState = true
                         }
                         launchSingleTop = true

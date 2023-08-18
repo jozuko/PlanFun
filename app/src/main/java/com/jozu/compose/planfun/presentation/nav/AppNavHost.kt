@@ -1,68 +1,65 @@
 package com.jozu.compose.planfun.presentation.nav
 
-import androidx.compose.animation.AnimatedContentScope
+import android.content.Intent
 import androidx.compose.runtime.Composable
-import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
-import com.jozu.compose.planfun.presentation.screen.account.AccountMenuScreen
-import com.jozu.compose.planfun.presentation.screen.plan.PlanListScreen
-import com.jozu.compose.planfun.presentation.screen.spot.SpotAddScreen
-import com.jozu.compose.planfun.presentation.screen.spot.SpotListScreen
+import androidx.navigation.navDeepLink
+import androidx.navigation.navOptions
+import com.jozu.compose.planfun.presentation.screen.AppMainScreen
+import com.jozu.compose.planfun.presentation.screen.share_target.ShareTargetScreen
+import timber.log.Timber
 
 /**
- * NavigationBar＋NavHostの実装
- * https://zenn.dev/ykrods/articles/580bc1fda58081
  *
- * Created by jozuko on 2023/08/09.
+ * Created by jozuko on 2023/08/18.
  * Copyright (c) 2023 Studio Jozu. All rights reserved.
  */
 @Composable
 fun AppNavHost(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = NavRoute.Plan.route) {
-        navigation(startDestination = NavRoute.Plan.PlanList.route, route = NavRoute.Plan.route) {
-            navComposable(NavRoute.Plan.PlanList.route) {
-                PlanListScreen()
-            }
-        }
+    navController.addOnDestinationChangedListener { controller, destination, arguments ->
+        Timber.d("OnDestinationChangedListener destination=${destination.route} previousBackStackEntry=${controller.previousBackStackEntry?.destination?.route}")
 
-        navigation(startDestination = NavRoute.Spot.SpotList.route, route = NavRoute.Spot.route) {
-            navComposable(NavRoute.Spot.SpotList.route) {
-                SpotListScreen(onNavigateToSpotAdd = {
-                    navController.navigate(NavRoute.Spot.SpotAdd.route)
-                })
-            }
-            navComposable(NavRoute.Spot.SpotAdd.route) {
-                SpotAddScreen(onNavigateToBack = {
-                    navController.popBackStack()
-                })
-            }
-        }
+        if (destination.route == AppNavRoute.ShareTarget.route) {
+            if (controller.previousBackStackEntry?.destination?.route == AppNavRoute.Main.route) {
+                val routeId = controller.graph.findNode(AppNavRoute.ShareTarget.route)?.id ?: return@addOnDestinationChangedListener
+                val navOptions = navOptions {
+                    popUpTo(navController.graph.id) {
+                        inclusive = true
+                    }
+                }
 
-        navigation(startDestination = NavRoute.Account.AccountMenu.route, route = NavRoute.Account.route) {
-            navComposable(NavRoute.Account.AccountMenu.route) {
-                AccountMenuScreen()
+                controller.navigate(
+                    resId = routeId,
+                    args = arguments,
+                    navOptions = navOptions,
+                )
             }
         }
     }
-}
 
-private fun NavGraphBuilder.navComposable(
-    route: String,
-    arguments: List<NamedNavArgument> = emptyList(),
-    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
-) {
-    composable(
-        route = route,
-        arguments = arguments,
-        enterTransition = NavAnim.enterTransition,
-        exitTransition = NavAnim.exitTransition,
-        popEnterTransition = NavAnim.popEnterTransition,
-        popExitTransition = NavAnim.popExitTransition,
-        content = content,
-    )
+    NavHost(
+        navController = navController,
+        startDestination = AppNavRoute.Main.route,
+        route = "app-nav",
+    ) {
+        composable(
+            route = AppNavRoute.Main.route,
+        ) {
+            AppMainScreen()
+        }
+
+        composable(
+            route = AppNavRoute.ShareTarget.route,
+            deepLinks = listOf(
+                navDeepLink {
+                    action = Intent.ACTION_SEND
+                    mimeType = "text/*"
+                },
+            ),
+        ) {
+            ShareTargetScreen()
+        }
+    }
 }

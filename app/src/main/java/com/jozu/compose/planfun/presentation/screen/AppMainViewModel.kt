@@ -17,7 +17,7 @@ import javax.inject.Inject
  * Copyright (c) 2023 Studio Jozu. All rights reserved.
  */
 @HiltViewModel
-class PlanFunAppViewModel @Inject constructor(
+class AppMainViewModel @Inject constructor(
     accountRepository: AccountRepository,
 ) : ViewModel() {
     /** ログイン中ユーザを返却するcallbackFlow */
